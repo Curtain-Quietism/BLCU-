@@ -291,7 +291,7 @@ class ChartGenerator:
         print("\n--- Starting Chart Generation ---")
         if isinstance(analysis_results.get("省市"), dict):
             self.plot_province_distribution(
-                analysis_results["省市"], top_k=TOP_N_PROVINCES
+                analysis_results["省市"]
             )
         if isinstance(analysis_results.get("性别"), dict):
             self.plot_gender_distribution(analysis_results["性别"])
@@ -308,12 +308,12 @@ class ChartGenerator:
             self.plot_birth_month_distribution(analysis_results["出生日期"])
         print("--- Chart Generation Complete ---")
 
-    def plot_province_distribution(self, counts: Dict[str, int], top_k: int) -> None:
+    def plot_province_distribution(self, counts: Dict[str, int]) -> None:
         """Generates a horizontal bar chart for province distribution."""
         if not counts:
             return
 
-        items = sorted(counts.items(), key=lambda x: (-x[1], str(x[0])))[:top_k]
+        items = sorted(counts.items(), key=lambda x: (-x[1], str(x[0])))
         labels = [item[0] for item in items][::-1]
         values = [item[1] for item in items][::-1]
         total = sum(counts.values())
@@ -321,12 +321,12 @@ class ChartGenerator:
         fig, ax = plt.subplots(figsize=(8, 6))
         ax.barh(labels, values, color=PALETTE)
         self._beautify_axes(ax)
-        ax.set_title(f"省市分布 Top{top_k}")
+        ax.set_title("省市分布")
         ax.set_xlabel("人数")
         ax.set_ylabel("省市")
         ax.xaxis.set_major_locator(MaxNLocator(integer=True))
         self._add_bar_labels(ax, orientation="h", show_pct=True, total=total)
-        self._save_figure(fig, f"省市分布_Top{top_k}.png")
+        self._save_figure(fig, "省市分布.png")
 
     def plot_gender_distribution(self, counts: Dict[str, int]) -> None:
         """Generates a donut chart for gender distribution."""
